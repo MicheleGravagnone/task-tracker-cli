@@ -10,11 +10,7 @@ public class Task {
     private Instant updatedAt;
 
     public Task(int id, String description) {
-        this.id = id;
-        this.description = description;
-        this.status = TaskStatus.TODO;
-        this.createdAt = Instant.now();
-        this.updatedAt = Instant.now();
+        this(id, description, TaskStatus.TODO, Instant.now(), Instant.now());
     }
 
     public Task(int id, String description, TaskStatus status, Instant createdAt, Instant updatedAt) {

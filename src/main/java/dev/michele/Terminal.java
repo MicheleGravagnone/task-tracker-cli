@@ -1,6 +1,32 @@
 package dev.michele;
 
 public final class Terminal {
+    static {
+        enableWindowsAnsi();
+    }
+
+    private static void enableWindowsAnsi() {
+        String os = System.getProperty("os.name", "").toLowerCase();
+        if (!os.contains("win")) return;
+        try {
+            var kernel32Class = Class.forName("com.sun.jna.platform.win32.Kernel32");
+        } catch (ClassNotFoundException ignored) {
+        }
+        System.out.print("\033[0m");
+    }
+
+    private static final boolean COLOR;
+    static {
+        String os = System.getProperty("os.name", "").toLowerCase();
+        boolean isWindows = os.contains("win");
+        boolean hasModernTerminal =
+            System.getenv("WT_SESSION") != null ||
+            System.getenv("TERM_PROGRAM") != null ||
+            System.getenv("TERM") != null;
+        boolean isIde = System.getenv("IDEA_INITIAL_DIRECTORY") != null
+                     || System.getenv("TERMINAL_EMULATOR") != null;
+        COLOR = !isWindows || hasModernTerminal || isIde;
+    }
 
     private static final String RESET  = "\033[0m";
     private static final String BOLD   = "\033[1m";

@@ -27,8 +27,8 @@ public class Main {
             }
         } catch (IllegalArgumentException e) {
             Terminal.error(e.getMessage());
-        } catch (RuntimeException e) {
-            Terminal.error("Unexpected error: " + e.getMessage());
+        } catch (RuntimeException _) {
+            Terminal.error("Unexpected error — check tasks.json is not corrupted.");
         }
     }
 
