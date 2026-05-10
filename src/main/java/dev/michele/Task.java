@@ -16,5 +16,25 @@ public class Task {
         this.createdAt = Instant.now();
         this.updatedAt = Instant.now();
     }
+
+    int getId() {
+        return this.id;
+    }
+
+    String getDescription() {
+        return this.description;
+    }
+
+    void setDescription(String description) {
+        this.description = description;
+    }
+
+    String getStatus() {
+        return this.status.toString();
+    }
+
+    void setStatus(String str) {
+        this.status = TaskStatus.from(str);
+    }
     
 }
