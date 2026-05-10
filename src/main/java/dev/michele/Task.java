@@ -1,6 +1,7 @@
 package dev.michele;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 public class Task {
     private int id;
@@ -8,54 +9,48 @@ public class Task {
     private TaskStatus status;
     private Instant createdAt;
     private Instant updatedAt;
+    private LocalDate dueDate;
 
     public Task(int id, String description) {
-        this(id, description, TaskStatus.TODO, Instant.now(), Instant.now());
+        this(id, description, TaskStatus.TODO, Instant.now(), Instant.now(), null);
     }
 
-    public Task(int id, String description, TaskStatus status, Instant createdAt, Instant updatedAt) {
-        this.id = id;
+    public Task(int id, String description, TaskStatus status, Instant createdAt, Instant updatedAt, LocalDate dueDate) {
+        this.id          = id;
         this.description = description;
-        this.status = status;
-        this.createdAt = createdAt;
-        this.updatedAt = updatedAt;
+        this.status      = status;
+        this.createdAt   = createdAt;
+        this.updatedAt   = updatedAt;
+        this.dueDate     = dueDate;
     }
 
-    public int getId() {
-        return this.id;
+    public int        getId()          { return id; }
+    public String     getDescription() { return description; }
+    public TaskStatus getStatus()      { return status; }
+    public Instant    getCreatedAt()   { return createdAt; }
+    public Instant    getUpdatedAt()   { return updatedAt; }
+    public LocalDate  getDueDate()     { return dueDate; }
+
+    public void setDescription(String description) { this.description = description; this.updatedAt = Instant.now(); }
+    public void setDueDate(LocalDate d)            { this.dueDate = d;              this.updatedAt = Instant.now(); }
+
+    public void setStatus(TaskStatus t) { this.status = t; this.updatedAt = Instant.now(); }
+    public void setStatus(String str)   { this.status = TaskStatus.from(str); this.updatedAt = Instant.now(); }
+
+    public boolean isOverdue() {
+        return dueDate != null
+            && status != TaskStatus.DONE
+            && dueDate.isBefore(LocalDate.now());
     }
 
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public TaskStatus getStatus() {
-        return this.status;
-    }
-
-    public void setStatus(TaskStatus t) {
-        this.status = t;
-    }
-
-    public void setStatus(String str) {
-        this.status = TaskStatus.from(str);
-    }
-
-    public Instant getCreatedAt() {
-        return this.createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return this.updatedAt;
+    public boolean isDueToday() {
+        return dueDate != null
+            && status != TaskStatus.DONE
+            && dueDate.isEqual(LocalDate.now());
     }
 
     @Override
     public String toString() {
-        return String.format("[%d] %-12s %s (created: %s)", id, "[" + status + "]", description, createdAt);
+        return "[%d] %-12s %s (created: %s)".formatted(id, "[" + status + "]", description, createdAt);
     }
-    
 }

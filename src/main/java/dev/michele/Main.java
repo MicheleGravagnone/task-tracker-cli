@@ -10,28 +10,71 @@ public class Main {
         System.setErr(new PrintStream(System.err, true, StandardCharsets.UTF_8));
 
         Terminal.clearScreen();
-        
+
         if (args.length == 0) { Terminal.help(); return; }
 
         TaskService service = new TaskService();
 
         try {
             switch (args[0]) {
-                case "add"              -> { require(args, 2, "add <description>");
-                                             service.add(args[1]); }
-                case "update"           -> { require(args, 3, "update <id> <description>");
-                                             service.update(parseInt(args[1]), args[2]); }
-                case "delete"           -> { require(args, 2, "delete <id>");
-                                             service.delete(parseInt(args[1])); }
-                case "mark-in-progress" -> { require(args, 2, "mark-in-progress <id>");
-                                             service.markInProgress(parseInt(args[1])); }
-                case "mark-done"        -> { require(args, 2, "mark-done <id>");
-                                             service.markDone(parseInt(args[1])); }
-                case "list"             -> service.list(args.length > 1
-                                             ? TaskStatus.from(args[1]) : null);
-                default                 -> { Terminal.error("Unknown command: " + args[0]);
-                                             Terminal.blank();
-                                             Terminal.help(); }
+
+                case "add" -> {
+                    require(args, 2, "add <description> [--due yyyy-MM-dd]");
+                    String due  = null;
+                    String desc = null;
+                    for (int i = 1; i < args.length; i++) {
+                        if (args[i].equals("--due") && i + 1 < args.length) {
+                            due = args[++i];
+                        } else {
+                            desc = args[i];
+                        }
+                    }
+                    if (desc == null) throw new IllegalArgumentException("Usage: task-cli add <description> [--due yyyy-MM-dd]");
+                    service.add(desc, due);
+                }
+
+                case "update" -> {
+                    require(args, 3, "update <id> <description>");
+                    service.update(parseInt(args[1]), args[2]);
+                }
+
+                case "due" -> {
+                    require(args, 3, "due <id> <yyyy-MM-dd>");
+                    service.setDue(parseInt(args[1]), args[2]);
+                }
+
+                case "delete" -> {
+                    require(args, 2, "delete <id>");
+                    service.delete(parseInt(args[1]));
+                }
+
+                case "mark-in-progress" -> {
+                    require(args, 2, "mark-in-progress <id>");
+                    service.markInProgress(parseInt(args[1]));
+                }
+
+                case "mark-done" -> {
+                    require(args, 2, "mark-done <id>");
+                    service.markDone(parseInt(args[1]));
+                }
+
+                case "list" -> service.list(args.length > 1 ? TaskStatus.from(args[1]) : null);
+
+                case "search" -> {
+                    require(args, 2, "search <query>");
+                    service.search(args[1]);
+                }
+
+                case "show" -> {
+                    require(args, 2, "show <id>");
+                    service.show(parseInt(args[1]));
+                }
+
+                default -> {
+                    Terminal.error("Unknown command: " + args[0]);
+                    Terminal.blank();
+                    Terminal.help();
+                }
             }
         } catch (IllegalArgumentException e) {
             Terminal.error(e.getMessage());
