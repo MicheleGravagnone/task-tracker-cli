@@ -208,6 +208,7 @@ public final class Terminal {
     }
 
     public static void clearScreen() {
+        if (System.console() == null) return;
         System.out.print("\033[2J\033[H");
         System.out.flush();
     }

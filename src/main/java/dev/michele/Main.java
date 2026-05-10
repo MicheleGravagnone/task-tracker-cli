@@ -7,8 +7,10 @@ public class Main {
 
     public static void main(String[] args) {
         System.setOut(new PrintStream(System.out, true, StandardCharsets.UTF_8));
-        System.setErr(new PrintStream(System.err, true, StandardCharsets.UTF_8))
-        ;
+        System.setErr(new PrintStream(System.err, true, StandardCharsets.UTF_8));
+
+        Terminal.clearScreen();
+        
         if (args.length == 0) { Terminal.help(); return; }
 
         TaskService service = new TaskService();
