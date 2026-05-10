@@ -40,16 +40,16 @@ public final class Terminal {
     private static final String BOLD   = "\033[1m";
     private static final String DIM    = "\033[2m";
 
-    private static final String FG_BORDER = "\033[33m";
-    private static final String FG_HEADER = "\033[33m";
-    private static final String FG_ID     = "\033[93m";
-    private static final String FG_WHITE  = "\033[97m";
-    private static final String FG_GRAY   = "\033[90m";
-    private static final String FG_GREEN  = "\033[92m";
-    private static final String FG_YELLOW = "\033[93m";
-    private static final String FG_RED    = "\033[91m";
-    private static final String FG_BLUE   = "\033[94m";
-    private static final String FG_TODO   = "\033[90m";
+    private static final String FG_BORDER = "\033[38;2;183;189;248m";
+    private static final String FG_HEADER = "\033[38;2;183;189;248m";
+    private static final String FG_ID     = "\033[38;2;198;160;246m";
+    private static final String FG_WHITE  = "\033[38;2;202;211;245m";
+    private static final String FG_GRAY   = "\033[38;2;91;96;120m";
+    private static final String FG_GREEN  = "\033[38;2;166;218;149m";
+    private static final String FG_YELLOW = "\033[38;2;238;212;159m";
+    private static final String FG_RED    = "\033[38;2;237;135;150m";
+    private static final String FG_TODO   = "\033[38;2;91;96;120m";
+    private static final String FG_BLUE   = "\033[38;2;137;180;250m";
 
     private static final String TL = "╭", TR = "╮", BL = "╰", BR = "╯";
     private static final String H  = "─", V  = "│";
