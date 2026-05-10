@@ -15,7 +15,7 @@ public class TaskRepository {
 
         try {
             String json = Files.readString(path);
-            return parsedJson(json);
+            return parseJson(json);
         } catch (IOException e) {
             throw new RuntimeException("Failed to read " + FILE, e);
         }
@@ -32,6 +32,7 @@ public class TaskRepository {
 
     private String toJson(List<Task> tasks) {
         StringBuilder sb = new StringBuilder();
+
         for (int i = 0; i < tasks.size(); i++) {
             Task t = tasks.get(i);
             sb.append("  {\n");
@@ -55,6 +56,21 @@ public class TaskRepository {
     private List<Task> parseJson(String json) {
         List<Task> tasks = new ArrayList<>();
 
+        String[] objects = json.split("\\{");
+        for (String obj : objects) {
+            if (!obj.contains("\"id\"")) continue;
+            int id = Integer.parseInt(field(obj, "id"));
+            String desc = field(obj, "description");
+            TaskStatus ts = TaskStatus.from(field(obj, "status"));
+            Instant ca = Instant.parse(field(obj, "createdAt"));
+            Instant ua = Instant.parse(field(obj, "updatedAt"));
+            tasks.add(new Task(id, desc, ts, ca, ua));
+        }
+
         return tasks;
+    }
+
+    private String field(String obj, String name) {
+
     }
 }
