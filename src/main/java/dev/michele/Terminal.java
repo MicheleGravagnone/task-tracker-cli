@@ -206,4 +206,9 @@ public final class Terminal {
             ldt.getDayOfMonth(), ldt.getMonthValue(),
             ldt.getHour(), ldt.getMinute());
     }
+
+    public static void clearScreen() {
+        System.out.print("\033[2J\033[H");
+        System.out.flush();
+    }
 }
