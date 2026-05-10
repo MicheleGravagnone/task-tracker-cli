@@ -2,22 +2,9 @@
   {
     "id": 1,
     "description": "Test",
-    "status": "done",
-    "createdAt": "2026-05-10T12:05:37.145526Z",
-    "updatedAt": "2026-05-10T12:05:37.145526Z"
-  },
-  {
-    "id": 2,
-    "description": "Fix the login bug",
-    "status": "in-progress",
-    "createdAt": "2026-05-10T15:42:28.863526800Z",
-    "updatedAt": "2026-05-10T15:42:28.863526800Z"
-  },
-  {
-    "id": 3,
-    "description": "Write unit tests",
     "status": "todo",
-    "createdAt": "2026-05-10T15:42:38.442536600Z",
-    "updatedAt": "2026-05-10T15:42:38.442536600Z"
+    "createdAt": "2026-05-10T12:05:37.145526Z",
+    "updatedAt": "2026-05-10T12:05:37.145526Z",
+    "dueDate": null
   }
 ]
