@@ -1,6 +1,7 @@
 package dev.michele;
 
 public final class Terminal {
+
     static {
         enableWindowsAnsi();
     }
@@ -28,20 +29,24 @@ public final class Terminal {
         COLOR = !isWindows || hasModernTerminal || isIde;
     }
 
+    private static String c(String code) {
+        return COLOR ? code : "";
+    }
+
     private static final String RESET  = "\033[0m";
     private static final String BOLD   = "\033[1m";
     private static final String DIM    = "\033[2m";
 
+    private static final String FG_BORDER  = "\033[33m";
+    private static final String FG_HEADER  = "\033[33m";
+    private static final String FG_ID      = "\033[93m";
     private static final String FG_WHITE   = "\033[97m";
-    private static final String FG_CYAN    = "\033[96m";
+    private static final String FG_GRAY    = "\033[90m";
     private static final String FG_GREEN   = "\033[92m";
     private static final String FG_YELLOW  = "\033[93m";
     private static final String FG_RED     = "\033[91m";
     private static final String FG_BLUE    = "\033[94m";
-    private static final String FG_MAGENTA = "\033[95m";
-    private static final String FG_GRAY    = "\033[90m";
-
-    private static final String BG_DARK    = "\033[48;5;235m";
+    private static final String FG_TODO    = "\033[90m"; 
 
     private static final String TL = "╭", TR = "╮", BL = "╰", BR = "╯";
     private static final String H  = "─", V  = "│";
@@ -49,48 +54,48 @@ public final class Terminal {
 
     public static void banner() {
         System.out.println();
-        System.out.println(FG_CYAN + BOLD +
-            "  ████████╗ █████╗ ███████╗██╗  ██╗" + RESET);
-        System.out.println(FG_CYAN + BOLD +
-            "     ██╔══╝██╔══██╗██╔════╝██║ ██╔╝" + RESET);
-        System.out.println(FG_CYAN + BOLD +
-            "     ██║   ███████║███████╗█████╔╝ " + RESET);
-        System.out.println(FG_CYAN + BOLD +
-            "     ██║   ██╔══██║╚════██║██╔═██╗ " + RESET);
-        System.out.println(FG_CYAN + BOLD +
-            "     ██║   ██║  ██║███████║██║  ██╗" + RESET);
-        System.out.println(FG_GRAY +
-            "  Task Tracker CLI  ·  dev.michele" + RESET);
+        System.out.println(c(FG_BORDER) + c(BOLD) +
+            "  ████████╗ █████╗ ███████╗██╗  ██╗" + c(RESET));
+        System.out.println(c(FG_BORDER) + c(BOLD) +
+            "     ██╔══╝██╔══██╗██╔════╝██║ ██╔╝" + c(RESET));
+        System.out.println(c(FG_BORDER) + c(BOLD) +
+            "     ██║   ███████║███████╗█████╔╝ " + c(RESET));
+        System.out.println(c(FG_BORDER) + c(BOLD) +
+            "     ██║   ██╔══██║╚════██║██╔═██╗ " + c(RESET));
+        System.out.println(c(FG_BORDER) + c(BOLD) +
+            "     ██║   ██║  ██║███████║██║  ██╗" + c(RESET));
+        System.out.println(c(FG_GRAY) +
+            "  Task Tracker CLI  ·  dev.michele" + c(RESET));
         System.out.println();
     }
 
     public static void header(String title) {
         int w = 48;
         String bar = H.repeat(w - 2);
-        System.out.println(FG_CYAN + TL + bar + TR + RESET);
+        System.out.println(c(FG_HEADER) + TL + bar + TR + c(RESET));
         String padded = pad(" " + title, w - 2);
-        System.out.println(FG_CYAN + V + RESET + BOLD + FG_WHITE + padded + RESET + FG_CYAN + V + RESET);
-        System.out.println(FG_CYAN + BL + bar + BR + RESET);
+        System.out.println(c(FG_HEADER) + V + c(RESET) + c(BOLD) + c(FG_WHITE) + padded + c(RESET) + c(FG_HEADER) + V + c(RESET));
+        System.out.println(c(FG_HEADER) + BL + bar + BR + c(RESET));
     }
 
     public static void success(String msg) {
-        System.out.println(FG_GREEN + BOLD + "  ✓ " + RESET + FG_GREEN + msg + RESET);
+        System.out.println(c(FG_GREEN) + c(BOLD) + "  + " + c(RESET) + c(FG_GREEN) + msg + c(RESET));
     }
 
     public static void error(String msg) {
-        System.out.println(FG_RED + BOLD + "  ✗ " + RESET + FG_RED + msg + RESET);
+        System.out.println(c(FG_RED) + c(BOLD) + "  x " + c(RESET) + c(FG_RED) + msg + c(RESET));
     }
 
     public static void info(String msg) {
-        System.out.println(FG_BLUE + "  → " + RESET + msg);
+        System.out.println(c(FG_BLUE) + "  > " + c(RESET) + msg);
     }
 
     public static void warn(String msg) {
-        System.out.println(FG_YELLOW + "  ⚠ " + msg + RESET);
+        System.out.println(c(FG_YELLOW) + "  ! " + msg + c(RESET));
     }
 
     public static void dim(String msg) {
-        System.out.println(FG_GRAY + DIM + "    " + msg + RESET);
+        System.out.println(c(FG_GRAY) + c(DIM) + "    " + msg + c(RESET));
     }
 
     public static void blank() {
@@ -108,34 +113,33 @@ public final class Terminal {
         int wDesc = 34;
         int wDate = 16;
 
-
         tableRow(TL, MT, MT, MT, TR, wId, wSt, wDesc, wDate);
-        System.out.printf(FG_CYAN + V + RESET
-            + " " + BOLD + FG_WHITE + "%-" + wId   + "s" + RESET
-            + FG_CYAN + " " + V + RESET
-            + " " + BOLD + FG_WHITE + "%-" + wSt   + "s" + RESET
-            + FG_CYAN + " " + V + RESET
-            + " " + BOLD + FG_WHITE + "%-" + wDesc + "s" + RESET
-            + FG_CYAN + " " + V + RESET
-            + " " + BOLD + FG_WHITE + "%-" + wDate + "s" + RESET
-            + " " + FG_CYAN + V + RESET + "%n",
+        System.out.printf(c(FG_BORDER) + V + c(RESET)
+            + " " + c(BOLD) + c(FG_WHITE) + "%-" + wId   + "s" + c(RESET)
+            + c(FG_BORDER) + " " + V + c(RESET)
+            + " " + c(BOLD) + c(FG_WHITE) + "%-" + wSt   + "s" + c(RESET)
+            + c(FG_BORDER) + " " + V + c(RESET)
+            + " " + c(BOLD) + c(FG_WHITE) + "%-" + wDesc + "s" + c(RESET)
+            + c(FG_BORDER) + " " + V + c(RESET)
+            + " " + c(BOLD) + c(FG_WHITE) + "%-" + wDate + "s" + c(RESET)
+            + " " + c(FG_BORDER) + V + c(RESET) + "%n",
             "ID", "Status", "Description", "Updated");
         tableRow(ML, MC, MC, MC, MR, wId, wSt, wDesc, wDate);
 
         for (Task t : tasks) {
-            String[] stColor = statusStyle(t.getStatus());
+            String[] st = statusStyle(t.getStatus());
             String desc = truncate(t.getDescription(), wDesc);
             String date = formatInstant(t.getUpdatedAt());
-            System.out.printf(FG_CYAN + V + RESET
-                + " " + FG_MAGENTA + "%-" + wId + "s" + RESET
-                + FG_CYAN + " " + V + RESET
-                + " " + stColor[0] + "%-" + wSt + "s" + RESET
-                + FG_CYAN + " " + V + RESET
-                + " " + FG_WHITE + "%-" + wDesc + "s" + RESET
-                + FG_CYAN + " " + V + RESET
-                + " " + FG_GRAY + "%-" + wDate + "s" + RESET
-                + " " + FG_CYAN + V + RESET + "%n",
-                t.getId(), stColor[1] + t.getStatus(), desc, date);
+            System.out.printf(c(FG_BORDER) + V + c(RESET)
+                + " " + c(FG_ID) + "%-" + wId + "s" + c(RESET)
+                + c(FG_BORDER) + " " + V + c(RESET)
+                + " " + st[0] + "%-" + wSt + "s" + c(RESET)
+                + c(FG_BORDER) + " " + V + c(RESET)
+                + " " + c(FG_WHITE) + "%-" + wDesc + "s" + c(RESET)
+                + c(FG_BORDER) + " " + V + c(RESET)
+                + " " + c(FG_GRAY) + "%-" + wDate + "s" + c(RESET)
+                + " " + c(FG_BORDER) + V + c(RESET) + "%n",
+                t.getId(), st[1], desc, date);
         }
 
         tableRow(BL, MB, MB, MB, BR, wId, wSt, wDesc, wDate);
@@ -163,31 +167,31 @@ public final class Terminal {
     }
 
     private static void helpCmd(String cmd, String desc) {
-        System.out.printf("  " + FG_CYAN + BOLD + "%-34s" + RESET + FG_GRAY + "%s" + RESET + "%n",
+        System.out.printf("  " + c(FG_BORDER) + c(BOLD) + "%-34s" + c(RESET) + c(FG_GRAY) + "%s" + c(RESET) + "%n",
             cmd, desc);
     }
 
     private static void tableRow(String l, String lm, String rm, String mm, String r,
                                   int w1, int w2, int w3, int w4) {
-        System.out.println(FG_CYAN
-            + l + H.repeat(w1 + 2)
+        System.out.println(c(FG_BORDER)
+            + l  + H.repeat(w1 + 2)
             + lm + H.repeat(w2 + 2)
             + mm + H.repeat(w3 + 2)
             + rm + H.repeat(w4 + 2)
-            + r + RESET);
+            + r  + c(RESET));
     }
 
     private static String[] statusStyle(TaskStatus s) {
         return switch (s) {
-            case TODO        -> new String[]{ FG_GRAY,   "○ " };
-            case IN_PROGRESS -> new String[]{ FG_YELLOW, "◐ " };
-            case DONE        -> new String[]{ FG_GREEN,  "● " };
+            case TODO        -> new String[]{ c(FG_TODO),   "- todo"       };
+            case IN_PROGRESS -> new String[]{ c(FG_YELLOW), "~ in-progress" };
+            case DONE        -> new String[]{ c(FG_GREEN),  "+ done"       };
         };
     }
 
     private static String truncate(String s, int max) {
         if (s.length() <= max) return s;
-        return s.substring(0, max - 1) + "…";
+        return s.substring(0, max - 1) + "~";
     }
 
     private static String pad(String s, int width) {

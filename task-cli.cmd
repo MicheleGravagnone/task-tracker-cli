@@ -1,4 +1,5 @@
 @echo off
+chcp 65001 >nul
 setlocal
 
 set "SCRIPT_DIR=%~dp0"
@@ -9,4 +10,4 @@ if not exist "%JAR%" (
     call mvn -q package -f "%SCRIPT_DIR%pom.xml"
 )
 
-java -jar "%JAR%" %*
+java -Dfile.encoding=UTF-8 -Dstdout.encoding=UTF-8 -jar "%JAR%" %*
