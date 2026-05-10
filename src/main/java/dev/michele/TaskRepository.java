@@ -71,6 +71,31 @@ public class TaskRepository {
     }
 
     private String field(String obj, String name) {
+        String key = "\"" + name + "\":";
+        int start = obj.indexOf(key);
 
+        if (start == -1) throw new IllegalArgumentException("Field not found: " + name);
+        start += key.length();
+        while (start < obj.length() && obj.charAt(start) == ' ') start++;
+        if (obj.charAt(start) != '"') {
+            int end = start;
+            while (end < obj.length() && (Character.isDigit(obj.charAt(end)) || obj.charAt(end) == '-')) end++;
+            return obj.substring(start, end).trim();
+        }
+        start++;
+        
+        StringBuilder sb = new StringBuilder();
+        while (start < obj.length()) {
+            char c = obj.charAt(start);
+            if (c == '\\' && start + 1 < obj.length()) {
+                char next = obj.charAt(start + 1);
+                if (next == '"') { sb.append('"'); start += 2; continue; }
+                if (next == '\\') { sb.append('\\'); start += 2; continue; }
+            }
+            if (c == '"') break;
+            sb.append(c);
+            start++;
+        }
+        return sb.toString();
     }
 }
