@@ -16,7 +16,7 @@ public class TaskService {
         Task task = new Task(nextId, description);
         tasks.add(task);
         repo.saveAll(tasks);
-        System.out.println("Task added successfully (ID: " + nextId + ")");
+        Terminal.success("Task added successfully (ID: " + nextId + ")");
     }
 
     public void update(int id, String description) {
@@ -24,7 +24,7 @@ public class TaskService {
         Task task = findById(tasks, id);
         task.setDescription(description);
         repo.saveAll(tasks);
-        System.out.println("Task " + id + " updated.");
+        Terminal.success("Task " + id + " updated.");
     }
 
     public void delete(int id) {
@@ -32,7 +32,7 @@ public class TaskService {
         boolean removed = tasks.removeIf(t -> t.getId() == id);
         if (!removed) throw new IllegalArgumentException("Task not found: " + id);
         repo.saveAll(tasks);
-        System.out.println("Task " + id + " deleted.");
+        Terminal.success("Task " + id + " deleted.");
     }
 
     public void markInProgress(int id) {
@@ -48,7 +48,7 @@ public class TaskService {
         Task task = findById(tasks, id);
         task.setStatus(status);
         repo.saveAll(tasks);
-        System.out.println("Task " + id + " marked as " + status + ".");
+        Terminal.success("Task " + id + " marked as " + status + ".");
     }
 
     public void list(TaskStatus filter) {
@@ -58,12 +58,10 @@ public class TaskService {
             : tasks.stream()
                     .filter(t -> t.getStatus() == filter)
                     .collect(Collectors.toList());
-                    
-        if (result.isEmpty()) {
-            System.out.println("No tasks found.");
-        } else {
-            result.forEach(System.out::println);
-        }
+
+        String title = filter == null ? "All tasks" : "Tasks · " + filter;
+        Terminal.header(title);
+        Terminal.taskTable(result);
     }
 
     private Task findById(List<Task> tasks, int id) {
