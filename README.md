@@ -58,6 +58,9 @@ mkdir -p ~/.local/bin
 ln -sf "$(pwd)/task-cli" ~/.local/bin/task-cli
 ```
 
+`chmod +x` is a one-time step that marks the script as executable.
+You do not need this on Windows — `task-cli.cmd` is recognized automatically.
+
 ---
 
 ## Usage
@@ -218,3 +221,7 @@ You are running in classic CMD. Switch to Windows Terminal or PowerShell. On Lin
 
 **Tasks disappear between sessions**
 The file is created in the current working directory. Always run `task-cli` from the same directory, or set a fixed path by editing the `FILE` constant in `TaskRepository.java` to an absolute path.
+
+**`task-cli` says "Permission denied" on Linux or macOS**
+The execute bit is not set on the wrapper script. Run `chmod +x task-cli`
+from the project root and try again.
