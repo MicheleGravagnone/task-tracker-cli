@@ -223,7 +223,9 @@ public final class Terminal {
     }
 
     public static void clearScreen() {
-        if (System.console() == null) return;
+        try {
+            if (System.console() == null && System.getenv("TERM") == null) return;
+        } catch (Exception ignored) {}
         System.out.print("\033[2J\033[H");
         System.out.flush();
     }
